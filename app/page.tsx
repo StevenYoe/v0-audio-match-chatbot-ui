@@ -48,19 +48,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background dark overflow-hidden">
       {/* Animated background gradient */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 bg-background">
         <div className="absolute inset-0 soundwave" />
-        <motion.div
+        <div
           className="absolute inset-0 opacity-20"
-          animate={{
-            background: [
-              'radial-gradient(at 20% 50%, rgba(85, 111, 255, 0.15) 0%, transparent 50%)',
-              'radial-gradient(at 80% 50%, rgba(102, 204, 255, 0.15) 0%, transparent 50%)',
-              'radial-gradient(at 20% 50%, rgba(85, 111, 255, 0.15) 0%, transparent 50%)',
-            ],
+          style={{
+            background: 'radial-gradient(at 20% 50%, rgba(85, 111, 255, 0.15) 0%, transparent 50%)',
+            pointerEvents: 'none',
+            animation: 'gradient-shift 8s ease-in-out infinite',
           }}
-          transition={{ duration: 8, repeat: Infinity }}
-          style={{ pointerEvents: 'none' }}
         />
       </div>
 
