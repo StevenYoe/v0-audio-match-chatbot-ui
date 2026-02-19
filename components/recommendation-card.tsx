@@ -13,14 +13,17 @@ interface RecommendationCardProps {
     image: string;
   };
   index: number;
+  onSelectProduct?: () => void;
 }
 
 export default function RecommendationCard({
   recommendation,
   index,
+  onSelectProduct,
 }: RecommendationCardProps) {
   return (
     <motion.div
+      onClick={onSelectProduct}
       className="group relative p-3 rounded-xl bg-card/50 border border-border/30 hover:border-primary/50 cursor-pointer transition-all duration-300"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}

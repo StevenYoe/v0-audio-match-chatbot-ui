@@ -107,14 +107,6 @@ export default function ProductDetail({ product, onClose }: ProductDetailProps) 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
             <motion.button
-              className="flex-1 py-3 rounded-lg bg-primary hover:bg-primary/80 text-primary-foreground font-semibold flex items-center justify-center gap-2 transition-colors"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <ShoppingCart className="w-5 h-5" />
-              Add to Cart
-            </motion.button>
-            <motion.button
               onClick={onClose}
               className="flex-1 py-3 rounded-lg bg-card border border-border/50 hover:bg-card/80 text-foreground font-semibold transition-colors"
               whileHover={{ scale: 1.02 }}

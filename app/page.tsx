@@ -83,7 +83,7 @@ export default function Home() {
 
                 {/* Recommendations Panel - Takes up 1 column on desktop */}
                 <div className="flex flex-col min-h-0">
-                  <RecommendationsPanel onBrowseAll={() => setView('catalog')} />
+                  <RecommendationsPanel onBrowseAll={() => setView('catalog')} onSelectProduct={handleSelectProduct} />
                 </div>
               </motion.div>
             ) : (

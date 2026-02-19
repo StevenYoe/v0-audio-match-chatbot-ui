@@ -11,7 +11,7 @@ const mockRecommendations = [
     name: 'Alpine iLX-F511',
     category: 'Head Unit',
     description: 'Premium touchscreen with CarPlay support',
-    price: '$899',
+    price: 'Rp 13.485.000',
     image: '🎛️',
   },
   {
@@ -19,7 +19,7 @@ const mockRecommendations = [
     name: 'Pioneer TS-A2000',
     category: 'Speakers',
     description: 'High-performance component speakers',
-    price: '$599',
+    price: 'Rp 8.985.000',
     image: '🔊',
   },
   {
@@ -27,16 +27,17 @@ const mockRecommendations = [
     name: 'JBL GTR 12SL',
     category: 'Subwoofer',
     description: 'Compact powered subwoofer with 500W',
-    price: '$349',
+    price: 'Rp 5.235.000',
     image: '📦',
   },
 ];
 
 interface RecommendationsPanelProps {
   onBrowseAll?: () => void;
+  onSelectProduct?: (product: any) => void;
 }
 
-export default function RecommendationsPanel({ onBrowseAll }: RecommendationsPanelProps) {
+export default function RecommendationsPanel({ onBrowseAll, onSelectProduct }: RecommendationsPanelProps) {
   return (
     <motion.div
       className="glass-panel flex flex-col h-full"
@@ -74,6 +75,7 @@ export default function RecommendationsPanel({ onBrowseAll }: RecommendationsPan
             key={rec.id}
             recommendation={rec}
             index={idx}
+            onSelectProduct={() => onSelectProduct?.(rec)}
           />
         ))}
       </div>
