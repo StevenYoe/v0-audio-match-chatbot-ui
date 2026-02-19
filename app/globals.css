@@ -214,8 +214,12 @@
   }
 
   .input-glow {
-    @apply bg-input border border-border focus-within:border-primary/50 focus-within:shadow-lg rounded-xl transition-all;
-    box-shadow: focus-within: 0 0 20px rgba(85, 111, 255, 0.2);
+    @apply bg-input border border-border rounded-xl transition-all;
+  }
+
+  .input-glow:focus-within {
+    @apply border-primary/50 shadow-lg;
+    box-shadow: 0 0 20px rgba(85, 111, 255, 0.2);
   }
 
   .button-neon {

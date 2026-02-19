@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Microphone } from 'lucide-react';
+import { Send, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useChatStore } from '@/lib/store';
 import ChatMessage from './chat-message';
@@ -147,7 +147,7 @@ export default function ChatInterface() {
               className="p-3 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary transition-colors"
               aria-label="Voice input"
             >
-              <Microphone className="w-5 h-5" />
+              <Mic className="w-5 h-5" />
             </motion.button>
 
             <motion.button
