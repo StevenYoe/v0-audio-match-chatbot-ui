@@ -26,8 +26,7 @@ export default function RecommendationCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
       whileHover={{
-        backgroundColor: 'rgba(19, 30, 76, 0.8)',
-        boxShadow: '0 0 30px rgba(85, 111, 255, 0.2)',
+        scale: 1.02,
       }}
     >
       {/* Hover glow effect */}
@@ -67,8 +66,8 @@ export default function RecommendationCard({
             {recommendation.price}
           </span>
           <motion.div
-            className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/30"
-            whileHover={{ backgroundColor: 'rgba(85, 111, 255, 0.2)' }}
+            className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 transition-colors"
+            whileHover={{ scale: 1.05 }}
           >
             View
           </motion.div>
