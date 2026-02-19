@@ -32,7 +32,11 @@ const mockRecommendations = [
   },
 ];
 
-export default function RecommendationsPanel() {
+interface RecommendationsPanelProps {
+  onBrowseAll?: () => void;
+}
+
+export default function RecommendationsPanel({ onBrowseAll }: RecommendationsPanelProps) {
   return (
     <motion.div
       className="glass-panel flex flex-col h-full"
@@ -81,6 +85,7 @@ export default function RecommendationsPanel() {
           whileTap={{ scale: 0.98 }}
         >
           <Button
+            onClick={onBrowseAll}
             className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-lg font-medium flex items-center justify-center gap-2 button-neon"
           >
             View Full Catalog

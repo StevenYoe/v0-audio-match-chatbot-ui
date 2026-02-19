@@ -20,8 +20,8 @@
   --accent-foreground: oklch(0.98 0.01 280);
   --destructive: oklch(0.60 0.25 20);
   --destructive-foreground: oklch(0.98 0.01 280);
-  --border: oklch(0.20 0.03 270);
-  --input: oklch(0.15 0.02 280);
+  --border: oklch(0.30 0.05 270);
+  --input: oklch(0.18 0.03 280);
   --ring: oklch(0.55 0.28 264);
   --chart-1: oklch(0.55 0.28 264);
   --chart-2: oklch(0.65 0.25 200);
@@ -59,7 +59,7 @@
   --accent-foreground: oklch(0.98 0.01 280);
   --destructive: oklch(0.60 0.25 20);
   --destructive-foreground: oklch(0.98 0.01 280);
-  --border: oklch(0.20 0.03 270);
+  --border: oklch(0.30 0.05 270);
   --input: oklch(0.15 0.02 280);
   --ring: oklch(0.55 0.28 264);
   --chart-1: oklch(0.55 0.28 264);
@@ -73,7 +73,7 @@
   --sidebar-primary-foreground: oklch(0.98 0.01 280);
   --sidebar-accent: oklch(0.65 0.25 200);
   --sidebar-accent-foreground: oklch(0.98 0.01 280);
-  --sidebar-border: oklch(0.20 0.03 270);
+  --sidebar-border: oklch(0.30 0.05 270);
   --sidebar-ring: oklch(0.55 0.28 264);
 }
 
@@ -124,6 +124,36 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Hide scrollbars but keep functionality */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(85, 111, 255, 0.3);
+    cursor: pointer;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  *:hover {
+    scrollbar-color: rgba(85, 111, 255, 0.3) transparent;
   }
 }
 
@@ -205,12 +235,13 @@
   }
 
   .chat-bubble-user {
-    @apply bg-card border border-primary/30 rounded-2xl px-4 py-3 max-w-xs;
+    @apply bg-primary/15 border border-primary/60 rounded-2xl px-4 py-3 max-w-xs;
+    box-shadow: 0 0 16px rgba(85, 111, 255, 0.2);
   }
 
   .chat-bubble-assistant {
-    @apply bg-card/60 border-l-2 border-primary rounded-2xl px-4 py-3 max-w-xs;
-    box-shadow: inset 2px 0 0 rgba(85, 111, 255, 0.5);
+    @apply bg-secondary/10 border border-secondary/50 rounded-2xl px-4 py-3 max-w-xs;
+    box-shadow: 0 0 16px rgba(102, 204, 255, 0.15);
   }
 
   .input-glow {

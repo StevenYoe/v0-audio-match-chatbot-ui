@@ -1,0 +1,193 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { ChevronLeft, Search } from 'lucide-react';
+import { useState } from 'react';
+import CatalogCard from './catalog-card';
+
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: string;
+  image: string;
+  description: string;
+}
+
+interface CatalogViewProps {
+  onBack: () => void;
+  onSelectProduct: (product: Product) => void;
+}
+
+const PRODUCTS: Product[] = [
+  {
+    id: '1',
+    name: 'Premium Subwoofer',
+    category: 'Bass Systems',
+    price: '$599',
+    image: '🔊',
+    description: 'Deep bass with crisp treble response',
+  },
+  {
+    id: '2',
+    name: 'Alpine Head Unit',
+    category: 'Head Units',
+    price: '$799',
+    image: '📱',
+    description: '10\" touchscreen with Apple CarPlay',
+  },
+  {
+    id: '3',
+    name: 'Door Speakers Kit',
+    category: 'Speakers',
+    price: '$349',
+    image: '🔉',
+    description: '6.5\" component speaker system',
+  },
+  {
+    id: '4',
+    name: 'Power Amplifier',
+    category: 'Amplifiers',
+    price: '$899',
+    image: '⚡',
+    description: '1000W 5-channel amplifier',
+  },
+  {
+    id: '5',
+    name: 'Tweeter Pair',
+    category: 'Speakers',
+    price: '$199',
+    image: '🎵',
+    description: 'High-frequency precision tweeters',
+  },
+  {
+    id: '6',
+    name: 'Sound Deadening Kit',
+    category: 'Acoustic Treatment',
+    price: '$249',
+    image: '🛡️',
+    description: 'Complete sound dampening materials',
+  },
+  {
+    id: '7',
+    name: 'Wireless Audio Receiver',
+    category: 'Connectivity',
+    price: '$149',
+    image: '📡',
+    description: 'Bluetooth 5.2 wireless receiver',
+  },
+  {
+    id: '8',
+    name: 'Capacitor Power Bank',
+    category: 'Power Systems',
+    price: '$399',
+    image: '🔋',
+    description: '20F digital display capacitor',
+  },
+];
+
+export default function CatalogView({ onBack, onSelectProduct }: CatalogViewProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const categories = Array.from(new Set(PRODUCTS.map(p => p.category)));
+
+  const filteredProducts = PRODUCTS.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <motion.div
+      className="glass-panel h-full flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {/* Header */}
+      <div className="p-4 border-b border-border/30 space-y-4">
+        <div className="flex items-center gap-3">
+          <motion.button
+            onClick={onBack}
+            className="p-2 rounded-lg bg-card/50 hover:bg-card border border-border/50 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ChevronLeft className="w-5 h-5 text-foreground" />
+          </motion.button>
+          <h2 className="text-xl font-bold text-foreground">Full Catalog</h2>
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-input border border-border/50 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50"
+          />
+        </div>
+
+        {/* Category filter */}
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          <motion.button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-3 py-1 rounded-full font-medium whitespace-nowrap transition-all ${
+              !selectedCategory
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card/50 text-muted-foreground border border-border/30 hover:border-border'
+            }`}
+            whileHover={{ scale: 1.05 }}
+          >
+            All
+          </motion.button>
+          {categories.map(category => (
+            <motion.button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-3 py-1 rounded-full font-medium whitespace-nowrap transition-all ${
+                selectedCategory === category
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card/50 text-muted-foreground border border-border/30 hover:border-border'
+              }`}
+              whileHover={{ scale: 1.05 }}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Products Grid */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {filteredProducts.map((product, idx) => (
+            <CatalogCard
+              key={product.id}
+              product={product}
+              index={idx}
+              onClick={() => onSelectProduct(product)}
+            />
+          ))}
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <motion.div
+            className="h-full flex items-center justify-center text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div>
+              <p className="text-muted-foreground text-lg mb-2">No products found</p>
+              <p className="text-sm text-muted-foreground">Try adjusting your search or filters</p>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
