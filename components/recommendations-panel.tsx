@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import RecommendationCard from './recommendation-card';
 import { fetchProducts } from '@/lib/api';
+import { Skeleton } from './ui/skeleton';
 
 const MOCK_RECOMMENDATIONS: any[] = [];
 
@@ -69,14 +70,34 @@ export default function RecommendationsPanel({ onBrowseAll, onSelectProduct }: R
 
       {/* Recommendations list */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {recommendations.map((rec, idx) => (
-          <RecommendationCard
-            key={rec.id}
-            recommendation={rec}
-            index={idx}
-            onSelectProduct={() => onSelectProduct?.(rec)}
-          />
-        ))}
+        {isLoading ? (
+          // Skeleton loader for 3 items
+          [1, 2, 3].map((i) => (
+            <div key={i} className="p-3 rounded-xl bg-card/50 border border-border/30 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <Skeleton className="w-10 h-10 rounded-md" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              </div>
+              <Skeleton className="h-3 w-full" />
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-6 w-12 rounded-full" />
+              </div>
+            </div>
+          ))
+        ) : (
+          recommendations.map((rec, idx) => (
+            <RecommendationCard
+              key={rec.id}
+              recommendation={rec}
+              index={idx}
+              onSelectProduct={() => onSelectProduct?.(rec)}
+            />
+          ))
+        )}
       </div>
 
       {/* Footer CTA */}

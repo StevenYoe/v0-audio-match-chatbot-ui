@@ -5,6 +5,7 @@ import { ChevronLeft, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CatalogCard from './catalog-card';
 import { fetchProducts } from '@/lib/api';
+import { Skeleton } from './ui/skeleton';
 
 interface Product {
   id: string;
@@ -120,28 +121,52 @@ export default function CatalogView({ onBack, onSelectProduct }: CatalogViewProp
 
       {/* Products Grid */}
       <div className="flex-1 overflow-y-auto p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {filteredProducts.map((product, idx) => (
-            <CatalogCard
-              key={product.id}
-              product={product}
-              index={idx}
-              onClick={() => onSelectProduct(product)}
-            />
-          ))}
-        </div>
-
-        {filteredProducts.length === 0 && (
-          <motion.div
-            className="h-full flex items-center justify-center text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <div>
-              <p className="text-muted-foreground text-lg mb-2">No products found</p>
-              <p className="text-sm text-muted-foreground">Try adjusting your search or filters</p>
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="p-4 rounded-xl bg-card/40 border border-border/50 space-y-3">
+                <div className="flex items-start justify-between">
+                  <Skeleton className="w-12 h-12 rounded-lg" />
+                  <Skeleton className="h-6 w-20 rounded-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className="h-3 w-full" />
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-border/30">
+                  <Skeleton className="h-6 w-1/2" />
+                  <Skeleton className="w-8 h-8 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {filteredProducts.map((product, idx) => (
+                <CatalogCard
+                  key={product.id}
+                  product={product}
+                  index={idx}
+                  onClick={() => onSelectProduct(product)}
+                />
+              ))}
             </div>
-          </motion.div>
+
+            {filteredProducts.length === 0 && (
+              <motion.div
+                className="h-full flex items-center justify-center text-center mt-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <div>
+                  <p className="text-muted-foreground text-lg mb-2">No products found</p>
+                  <p className="text-sm text-muted-foreground">Try adjusting your search or filters</p>
+                </div>
+              </motion.div>
+            )}
+          </>
         )}
       </div>
     </motion.div>

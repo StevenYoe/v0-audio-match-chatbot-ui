@@ -2,76 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Mic, MicOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Send } from 'lucide-react';
 import { useChatStore } from '@/lib/store';
 import ChatMessage from './chat-message';
 import { sendChatMessage } from '@/lib/api';
-import { toast } from 'sonner';
 
 export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
   const { messages, addMessage } = useChatStore();
-
-  // Initialize Speech Recognition
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = true; // Keep listening until manually stopped or long silence
-        recognitionRef.current.interimResults = true; // Show results as they come
-        recognitionRef.current.lang = 'en-US'; // Set English as primary for better stability
-        
-        recognitionRef.current.onresult = (event: any) => {
-          let finalTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript;
-            }
-          }
-          if (finalTranscript) {
-            setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
-          }
-        };
-
-        recognitionRef.current.onerror = (event: any) => {
-          if (event.error !== 'no-speech') {
-            console.error('Speech recognition error:', event.error);
-            setIsListening(false);
-            toast.error(`Error: ${event.error}`);
-          }
-        };
-
-        recognitionRef.current.onend = () => {
-          setIsListening(false);
-        };
-      }
-    }
-  }, []);
-
-  const toggleListening = () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    } else {
-      if (!recognitionRef.current) {
-        toast.error('Fitur input suara tidak didukung di browser ini.');
-        return;
-      }
-      try {
-        recognitionRef.current.start();
-        setIsListening(true);
-        toast.info('Listening...');
-      } catch (error) {
-        console.error('Failed to start recognition:', error);
-      }
-    }
-  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -199,50 +139,13 @@ export default function ChatInterface() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={isListening ? "Listening..." : "Describe your car audio issue..."}
-              className={`w-full bg-transparent p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:outline-none focus:ring-0 transition-opacity ${isListening ? 'opacity-50' : 'opacity-100'}`}
+              placeholder="Describe your car audio issue..."
+              className="w-full bg-transparent p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:outline-none focus:ring-0"
               rows={2}
             />
-            {isListening && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="flex gap-1">
-                  {[0, 1, 2, 3].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-1 h-4 bg-primary rounded-full"
-                      animate={{ height: [4, 16, 4] }}
-                      transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
           
-          <div className="flex gap-2 items-end">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleListening}
-              className={`p-3 rounded-xl border transition-all ${
-                isListening 
-                  ? 'bg-red-500/20 border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' 
-                  : 'bg-primary/20 hover:bg-primary/30 border-primary/50 text-primary'
-              }`}
-              aria-label={isListening ? "Stop listening" : "Voice input"}
-            >
-              {isListening ? (
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <Mic className="w-5 h-5" />
-                </motion.div>
-              ) : (
-                <Mic className="w-5 h-5" />
-              )}
-            </motion.button>
-
+          <div className="flex items-end">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
