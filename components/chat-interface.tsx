@@ -23,29 +23,28 @@ export default function ChatInterface() {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = false;
-        recognitionRef.current.interimResults = false;
-        // Use a list of languages for better support, although some browsers only take the first one,
-        // others like Chrome are good at multi-language context if configured.
-        recognitionRef.current.lang = 'id-ID'; 
+        recognitionRef.current.continuous = true; // Keep listening until manually stopped or long silence
+        recognitionRef.current.interimResults = true; // Show results as they come
+        recognitionRef.current.lang = 'en-US'; // Set English as primary for better stability
         
-        // Hint for the browser to support English as well
-        if ('lang' in recognitionRef.current) {
-          // Setting it to a broader scope or switching based on user preference is ideal, 
-          // but for now we set it to Indonesian as primary with English fallback support.
-          // Note: Most browsers support one primary lang per session.
-        }
-
         recognitionRef.current.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          setInput((prev) => prev + (prev ? ' ' : '') + transcript);
-          setIsListening(false);
+          let finalTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+          }
+          if (finalTranscript) {
+            setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+          }
         };
 
         recognitionRef.current.onerror = (event: any) => {
-          console.error('Speech recognition error:', event.error);
-          setIsListening(false);
-          toast.error('Gagal mengenali suara. Silakan coba lagi.');
+          if (event.error !== 'no-speech') {
+            console.error('Speech recognition error:', event.error);
+            setIsListening(false);
+            toast.error(`Error: ${event.error}`);
+          }
         };
 
         recognitionRef.current.onend = () => {
@@ -67,7 +66,7 @@ export default function ChatInterface() {
       try {
         recognitionRef.current.start();
         setIsListening(true);
-        toast.info('Mendengarkan...');
+        toast.info('Listening...');
       } catch (error) {
         console.error('Failed to start recognition:', error);
       }
@@ -200,7 +199,7 @@ export default function ChatInterface() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={isListening ? "Mendengarkan..." : "Describe your car audio issue..."}
+              placeholder={isListening ? "Listening..." : "Describe your car audio issue..."}
               className={`w-full bg-transparent p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:outline-none focus:ring-0 transition-opacity ${isListening ? 'opacity-50' : 'opacity-100'}`}
               rows={2}
             />
