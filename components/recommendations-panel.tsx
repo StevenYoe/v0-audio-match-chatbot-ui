@@ -9,29 +9,29 @@ import { fetchProducts } from '@/lib/api';
 
 const MOCK_RECOMMENDATIONS = [
   {
-    id: '1',
-    name: 'Alpine iLX-F511',
-    category: 'Head Unit',
-    description: 'Premium touchscreen with CarPlay support',
-    price: 'Rp 13.485.000',
-    image: '🎛️',
+    // id: '1',
+    // name: 'Alpine iLX-F511',
+    // category: 'Head Unit',
+    // description: 'Premium touchscreen with CarPlay support',
+    // price: 'Rp 13.485.000',
+    // image: '🎛️',
   },
-  {
-    id: '2',
-    name: 'Pioneer TS-A2000',
-    category: 'Speakers',
-    description: 'High-performance component speakers',
-    price: 'Rp 8.985.000',
-    image: '🔊',
-  },
-  {
-    id: '3',
-    name: 'JBL GTR 12SL',
-    category: 'Subwoofer',
-    description: 'Compact powered subwoofer with 500W',
-    price: 'Rp 5.235.000',
-    image: '📦',
-  },
+  // {
+  //   id: '2',
+  //   name: 'Pioneer TS-A2000',
+  //   category: 'Speakers',
+  //   description: 'High-performance component speakers',
+  //   price: 'Rp 8.985.000',
+  //   image: '🔊',
+  // },
+  // {
+  //   id: '3',
+  //   name: 'JBL GTR 12SL',
+  //   category: 'Subwoofer',
+  //   description: 'Compact powered subwoofer with 500W',
+  //   price: 'Rp 5.235.000',
+  //   image: '📦',
+  // },
 ];
 
 interface RecommendationsPanelProps {
