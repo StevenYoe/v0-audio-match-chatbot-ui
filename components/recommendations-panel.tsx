@@ -7,32 +7,7 @@ import { useState, useEffect } from 'react';
 import RecommendationCard from './recommendation-card';
 import { fetchProducts } from '@/lib/api';
 
-const MOCK_RECOMMENDATIONS = [
-  {
-    id: '1',
-    name: 'Alpine iLX-F511',
-    category: 'Head Unit',
-    description: 'Premium touchscreen with CarPlay support',
-    price: 'Rp 13.485.000',
-    image: '🎛️',
-  },
-  {
-    id: '2',
-    name: 'Pioneer TS-A2000',
-    category: 'Speakers',
-    description: 'High-performance component speakers',
-    price: 'Rp 8.985.000',
-    image: '🔊',
-  },
-  {
-    id: '3',
-    name: 'JBL GTR 12SL',
-    category: 'Subwoofer',
-    description: 'Compact powered subwoofer with 500W',
-    price: 'Rp 5.235.000',
-    image: '📦',
-  },
-];
+const MOCK_RECOMMENDATIONS: any[] = [];
 
 interface RecommendationsPanelProps {
   onBrowseAll?: () => void;
@@ -40,8 +15,8 @@ interface RecommendationsPanelProps {
 }
 
 export default function RecommendationsPanel({ onBrowseAll, onSelectProduct }: RecommendationsPanelProps) {
-  const [recommendations, setRecommendations] = useState<any[]>(MOCK_RECOMMENDATIONS);
-  const [isLoading, setIsLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getRecommendations = async () => {

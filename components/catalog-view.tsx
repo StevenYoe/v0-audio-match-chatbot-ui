@@ -20,78 +20,13 @@ interface CatalogViewProps {
   onSelectProduct: (product: Product) => void;
 }
 
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Premium Subwoofer',
-    category: 'Bass Systems',
-    price: 'Rp 9.500.000',
-    image: '🔊',
-    description: 'Deep bass with crisp treble response',
-  },
-  {
-    id: '2',
-    name: 'Alpine Head Unit',
-    category: 'Head Units',
-    price: 'Rp 12.750.000',
-    image: '📱',
-    description: '10" touchscreen with Apple CarPlay',
-  },
-  {
-    id: '3',
-    name: 'Door Speakers Kit',
-    category: 'Speakers',
-    price: 'Rp 5.600.000',
-    image: '🔉',
-    description: '6.5" component speaker system',
-  },
-  {
-    id: '4',
-    name: 'Power Amplifier',
-    category: 'Amplifiers',
-    price: 'Rp 14.350.000',
-    image: '⚡',
-    description: '1000W 5-channel amplifier',
-  },
-  {
-    id: '5',
-    name: 'Tweeter Pair',
-    category: 'Speakers',
-    price: 'Rp 3.175.000',
-    image: '🎵',
-    description: 'High-frequency precision tweeters',
-  },
-  {
-    id: '6',
-    name: 'Sound Deadening Kit',
-    category: 'Acoustic Treatment',
-    price: 'Rp 3.975.000',
-    image: '🛡️',
-    description: 'Complete sound dampening materials',
-  },
-  {
-    id: '7',
-    name: 'Wireless Audio Receiver',
-    category: 'Connectivity',
-    price: 'Rp 2.375.000',
-    image: '📡',
-    description: 'Bluetooth 5.2 wireless receiver',
-  },
-  {
-    id: '8',
-    name: 'Capacitor Power Bank',
-    category: 'Power Systems',
-    price: 'Rp 6.350.000',
-    image: '🔋',
-    description: '20F digital display capacitor',
-  },
-];
+const MOCK_PRODUCTS: Product[] = [];
 
 export default function CatalogView({ onBack, onSelectProduct }: CatalogViewProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
-  const [isLoading, setIsLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getProducts = async () => {

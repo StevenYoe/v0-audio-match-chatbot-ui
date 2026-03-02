@@ -2,17 +2,77 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Mic } from 'lucide-react';
+import { Send, Mic, MicOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useChatStore } from '@/lib/store';
 import ChatMessage from './chat-message';
 import { sendChatMessage } from '@/lib/api';
+import { toast } from 'sonner';
 
 export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
   const { messages, addMessage } = useChatStore();
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        // Use a list of languages for better support, although some browsers only take the first one,
+        // others like Chrome are good at multi-language context if configured.
+        recognitionRef.current.lang = 'id-ID'; 
+        
+        // Hint for the browser to support English as well
+        if ('lang' in recognitionRef.current) {
+          // Setting it to a broader scope or switching based on user preference is ideal, 
+          // but for now we set it to Indonesian as primary with English fallback support.
+          // Note: Most browsers support one primary lang per session.
+        }
+
+        recognitionRef.current.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          setInput((prev) => prev + (prev ? ' ' : '') + transcript);
+          setIsListening(false);
+        };
+
+        recognitionRef.current.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+          toast.error('Gagal mengenali suara. Silakan coba lagi.');
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (!recognitionRef.current) {
+        toast.error('Fitur input suara tidak didukung di browser ini.');
+        return;
+      }
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        toast.info('Mendengarkan...');
+      } catch (error) {
+        console.error('Failed to start recognition:', error);
+      }
+    }
+  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -40,7 +100,6 @@ export default function ChatInterface() {
     try {
       const data = await sendChatMessage(userMessage);
       
-      // Assuming the response from backend is { response: "..." } or { content: "..." }
       const content = data.response || data.content || data.message || "I'm sorry, I couldn't process your request.";
 
       addMessage({
@@ -136,25 +195,53 @@ export default function ChatInterface() {
       {/* Input area */}
       <div className="p-6 border-t border-border/30 bg-gradient-to-t from-card/40 to-transparent">
         <div className="flex gap-3">
-          <div className="flex-1 input-glow">
+          <div className="flex-1 input-glow relative">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Describe your car audio issue..."
-              className="w-full bg-transparent p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:outline-none focus:ring-0"
+              placeholder={isListening ? "Mendengarkan..." : "Describe your car audio issue..."}
+              className={`w-full bg-transparent p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:outline-none focus:ring-0 transition-opacity ${isListening ? 'opacity-50' : 'opacity-100'}`}
               rows={2}
             />
+            {isListening && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="flex gap-1">
+                  {[0, 1, 2, 3].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1 h-4 bg-primary rounded-full"
+                      animate={{ height: [4, 16, 4] }}
+                      transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="flex gap-2 items-end">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary transition-colors"
-              aria-label="Voice input"
+              onClick={toggleListening}
+              className={`p-3 rounded-xl border transition-all ${
+                isListening 
+                  ? 'bg-red-500/20 border-red-500 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' 
+                  : 'bg-primary/20 hover:bg-primary/30 border-primary/50 text-primary'
+              }`}
+              aria-label={isListening ? "Stop listening" : "Voice input"}
             >
-              <Mic className="w-5 h-5" />
+              {isListening ? (
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Mic className="w-5 h-5" />
+                </motion.div>
+              ) : (
+                <Mic className="w-5 h-5" />
+              )}
             </motion.button>
 
             <motion.button
