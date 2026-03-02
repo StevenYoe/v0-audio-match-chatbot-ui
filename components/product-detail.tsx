@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { X, Star, ShoppingCart, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { formatIDR } from '@/lib/utils';
 
 interface Product {
   id: string;
@@ -75,7 +76,7 @@ export default function ProductDetail({ product, onClose }: ProductDetailProps) 
               </div>
 
               {/* Price */}
-              <div className="text-4xl font-bold text-primary">{product.price}</div>
+              <div className="text-4xl font-bold text-primary">{formatIDR(product.price)}</div>
             </div>
           </div>
 

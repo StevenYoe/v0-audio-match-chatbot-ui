@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { formatIDR } from '@/lib/utils';
 
 interface Product {
   id: string;
@@ -65,7 +66,7 @@ export default function CatalogCard({ product, index, onClick }: CatalogCardProp
 
         {/* Price and CTA */}
         <div className="flex items-center justify-between pt-2 border-t border-border/30">
-          <span className="text-lg font-bold text-primary">{product.price}</span>
+          <span className="text-lg font-bold text-primary">{formatIDR(product.price)}</span>
           <motion.div
             className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all"
             whileHover={{ scale: 1.1 }}

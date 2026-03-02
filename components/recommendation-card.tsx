@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { formatIDR } from '@/lib/utils';
 
 interface RecommendationCardProps {
   recommendation: {
@@ -72,7 +73,7 @@ export default function RecommendationCard({
         {/* Price */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-foreground">
-            {recommendation.price}
+            {formatIDR(recommendation.price)}
           </span>
           <motion.div
             className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 transition-colors"
