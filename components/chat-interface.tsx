@@ -6,6 +6,7 @@ import { Send, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useChatStore } from '@/lib/store';
 import ChatMessage from './chat-message';
+import { sendChatMessage } from '@/lib/api';
 
 export default function ChatInterface() {
   const [input, setInput] = useState('');
@@ -23,35 +24,41 @@ export default function ChatInterface() {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    const userMessage = input;
+
     // Add user message
     addMessage({
       id: Date.now().toString(),
       type: 'user',
-      content: input,
+      content: userMessage,
       timestamp: new Date(),
     });
 
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responses = [
-        'I recommend upgrading your head unit to support wireless Android Auto and Apple CarPlay. What\'s your budget range?',
-        'For bass, a quality subwoofer would make a huge difference. Are you looking for discrete or powered options?',
-        'Your speakers could benefit from professional installation. I can suggest our top-rated systems in your area.',
-        'Based on your vehicle, I\'d recommend our premium amplifier package. It would pair perfectly with new speakers.',
-      ];
+    try {
+      const data = await sendChatMessage(userMessage);
       
+      // Assuming the response from backend is { response: "..." } or { content: "..." }
+      const content = data.response || data.content || data.message || "I'm sorry, I couldn't process your request.";
+
       addMessage({
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: content,
         timestamp: new Date(),
       });
-      
+    } catch (error) {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        content: "Sorry, I'm having trouble connecting to the server. Please check your connection and try again.",
+        timestamp: new Date(),
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

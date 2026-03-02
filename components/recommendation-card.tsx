@@ -44,7 +44,13 @@ export default function RecommendationCard({
       <div className="relative z-10">
         {/* Product image emoji and info row */}
         <div className="flex items-start justify-between gap-3 mb-2">
-          <div className="text-2xl">{recommendation.image}</div>
+          <div className="text-2xl w-10 h-10 flex items-center justify-center overflow-hidden">
+            {recommendation.image.startsWith('http') || recommendation.image.startsWith('/') ? (
+              <img src={recommendation.image} alt={recommendation.name} className="w-full h-full object-cover rounded-md" />
+            ) : (
+              recommendation.image
+            )}
+          </div>
           <div className="flex-1">
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-foreground truncate">

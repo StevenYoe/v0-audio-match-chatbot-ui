@@ -43,7 +43,13 @@ export default function CatalogCard({ product, index, onClick }: CatalogCardProp
       <div className="relative z-10 space-y-3">
         {/* Image and Category */}
         <div className="flex items-start justify-between">
-          <div className="text-4xl">{product.image}</div>
+          <div className="text-4xl w-12 h-12 flex items-center justify-center overflow-hidden">
+            {product.image.startsWith('http') || product.image.startsWith('/') ? (
+              <img src={product.image} alt={product.name} className="w-full h-full object-cover rounded-lg" />
+            ) : (
+              product.image
+            )}
+          </div>
           <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/30 font-medium">
             {product.category}
           </span>

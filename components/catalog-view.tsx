@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { ChevronLeft, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CatalogCard from './catalog-card';
+import { fetchProducts } from '@/lib/api';
 
 interface Product {
   id: string;
@@ -19,7 +20,7 @@ interface CatalogViewProps {
   onSelectProduct: (product: Product) => void;
 }
 
-const PRODUCTS: Product[] = [
+const MOCK_PRODUCTS: Product[] = [
   {
     id: '1',
     name: 'Premium Subwoofer',
@@ -89,10 +90,30 @@ const PRODUCTS: Product[] = [
 export default function CatalogView({ onBack, onSelectProduct }: CatalogViewProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const categories = Array.from(new Set(PRODUCTS.map(p => p.category)));
+  useEffect(() => {
+    const getProducts = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedProducts = await fetchProducts();
+        if (fetchedProducts && Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
+          setProducts(fetchedProducts);
+        }
+      } catch (error) {
+        console.error('Failed to load products from API:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const filteredProducts = PRODUCTS.filter(product => {
+    getProducts();
+  }, []);
+
+  const categories = Array.from(new Set(products.map(p => p.category)));
+
+  const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !selectedCategory || product.category === selectedCategory;

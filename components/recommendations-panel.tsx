@@ -3,9 +3,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 import RecommendationCard from './recommendation-card';
+import { fetchProducts } from '@/lib/api';
 
-const mockRecommendations = [
+const MOCK_RECOMMENDATIONS = [
   {
     id: '1',
     name: 'Alpine iLX-F511',
@@ -38,6 +40,28 @@ interface RecommendationsPanelProps {
 }
 
 export default function RecommendationsPanel({ onBrowseAll, onSelectProduct }: RecommendationsPanelProps) {
+  const [recommendations, setRecommendations] = useState<any[]>(MOCK_RECOMMENDATIONS);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getRecommendations = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedProducts = await fetchProducts();
+        if (fetchedProducts && Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
+          // Take first 3 for recommendations
+          setRecommendations(fetchedProducts.slice(0, 3));
+        }
+      } catch (error) {
+        console.error('Failed to load recommendations:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getRecommendations();
+  }, []);
+
   return (
     <motion.div
       className="glass-panel flex flex-col h-full"
@@ -70,7 +94,7 @@ export default function RecommendationsPanel({ onBrowseAll, onSelectProduct }: R
 
       {/* Recommendations list */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {mockRecommendations.map((rec, idx) => (
+        {recommendations.map((rec, idx) => (
           <RecommendationCard
             key={rec.id}
             recommendation={rec}
