@@ -1,8 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { PlusCircle } from 'lucide-react';
+import { useChatStore } from '@/lib/store';
 
 export default function Header() {
+  const clearMessages = useChatStore((state) => state.clearMessages);
+
   return (
     <motion.header
       className="relative border-b border-border/30 backdrop-blur-sm bg-card/20"
@@ -32,15 +36,28 @@ export default function Header() {
             </p>
           </div>
 
-          {/* Status indicator */}
-          <motion.div
-            className="flex items-center gap-2"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <div className="w-2 h-2 bg-primary rounded-full neon-glow" />
-            <span className="text-xs text-primary font-medium">Active</span>
-          </motion.div>
+          <div className="flex items-center gap-4">
+            {/* New Chat Button */}
+            <motion.button
+              onClick={clearMessages}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary text-xs font-semibold transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <PlusCircle className="w-4 h-4" />
+              New Chat
+            </motion.button>
+
+            {/* Status indicator */}
+            <motion.div
+              className="flex items-center gap-2"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <div className="w-2 h-2 bg-primary rounded-full neon-glow" />
+              <span className="text-xs text-primary font-medium">Active</span>
+            </motion.div>
+          </div>
         </div>
       </div>
 

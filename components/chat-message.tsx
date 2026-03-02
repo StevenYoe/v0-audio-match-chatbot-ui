@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Message } from '@/lib/store';
+import { formatNumbersInText } from '@/lib/utils';
 
 interface ChatMessageProps {
   message: Message;
@@ -10,6 +11,7 @@ interface ChatMessageProps {
 
 export default function ChatMessage({ message, index }: ChatMessageProps) {
   const isUser = message.type === 'user';
+  const displayContent = isUser ? message.content : formatNumbersInText(message.content);
 
   return (
     <motion.div
@@ -26,7 +28,7 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
         }`}
       >
         <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
-          {message.content}
+          {displayContent}
         </p>
         <span className="text-xs text-muted-foreground mt-2 block opacity-60">
           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
