@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Message } from '@/lib/store';
 import { formatNumbersInText } from '@/lib/utils';
 import InlineRecommendations from './inline-recommendations';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessageProps {
   message: Message;
@@ -28,9 +29,15 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
             : 'chat-bubble-assistant'
         }`}
       >
-        <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
-          {displayContent}
-        </p>
+        {isUser ? (
+          <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
+            {displayContent}
+          </p>
+        ) : (
+          <div className="markdown-content text-sm leading-relaxed text-foreground">
+            <ReactMarkdown>{displayContent}</ReactMarkdown>
+          </div>
+        )}
         <span className="text-xs text-muted-foreground mt-2 block opacity-60">
           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
