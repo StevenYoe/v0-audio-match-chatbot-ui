@@ -38,14 +38,16 @@ export default function ChatInterface() {
 
     try {
       const data = await sendChatMessage(userMessage);
-      
+
       const content = data.response || data.content || data.message || "I'm sorry, I couldn't process your request.";
+      const recommendations = data.recommendations || [];
 
       addMessage({
         id: (Date.now() + 1).toString(),
         type: 'assistant',
         content: content,
         timestamp: new Date(),
+        recommendations: recommendations.length > 0 ? recommendations : undefined,
       });
     } catch (error) {
       addMessage({
@@ -144,7 +146,7 @@ export default function ChatInterface() {
               rows={2}
             />
           </div>
-          
+
           <div className="flex items-end">
             <motion.button
               whileHover={{ scale: 1.05 }}

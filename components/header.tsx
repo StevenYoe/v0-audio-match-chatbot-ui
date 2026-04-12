@@ -25,13 +25,13 @@ export default function Header() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-5xl mx-auto px-6 py-6">
         <div className="flex items-center justify-between">
           {/* Logo section */}
           <div className="flex flex-col">
             <motion.h1
               className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tighter"
-              animate={{ 
+              animate={{
                 textShadow: [
                   '0 0 0px rgba(85, 111, 255, 0)',
                   '0 0 20px rgba(85, 111, 255, 0.5)',
@@ -43,7 +43,7 @@ export default function Header() {
               AudioMatch
             </motion.h1>
             <p className="text-sm text-muted-foreground mt-1 tracking-wide">
-              Find Your Perfect Audio Setup
+              AI-Powered Car Audio Specialist
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export default function Header() {
                   <AlertDialogCancel className="bg-card hover:bg-card/80 border-border/50 text-foreground rounded-lg px-4 py-2 transition-colors">
                     Cancel
                   </AlertDialogCancel>
-                  <AlertDialogAction 
+                  <AlertDialogAction
                     onClick={clearMessages}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg px-6 py-2 transition-all button-neon"
                   >

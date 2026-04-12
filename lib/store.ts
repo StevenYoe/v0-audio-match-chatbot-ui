@@ -6,14 +6,19 @@ export interface Message {
   type: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  recommendations?: Array<{
+    id: string;
+    name: string;
+    category?: string;
+    description?: string;
+    price?: string | number;
+  }>;
 }
 
 interface ChatStore {
   messages: Message[];
   addMessage: (message: Message) => void;
   clearMessages: () => void;
-  selectedRecommendation: string | null;
-  setSelectedRecommendation: (id: string | null) => void;
 }
 
 const INITIAL_MESSAGES: Message[] = [
@@ -43,11 +48,6 @@ export const useChatStore = create<ChatStore>()(
               timestamp: new Date(),
             },
           ],
-        }),
-      selectedRecommendation: null,
-      setSelectedRecommendation: (id) =>
-        set({
-          selectedRecommendation: id,
         }),
     }),
     {
