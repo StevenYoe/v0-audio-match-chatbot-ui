@@ -235,12 +235,12 @@
   }
 
   .chat-bubble-user {
-    @apply bg-primary/15 border border-primary/60 rounded-2xl px-4 py-3 max-w-xs;
+    @apply bg-primary/15 border border-primary/60 rounded-2xl px-4 py-3 max-w-2xl;
     box-shadow: 0 0 16px rgba(85, 111, 255, 0.2);
   }
 
   .chat-bubble-assistant {
-    @apply bg-secondary/10 border border-secondary/50 rounded-2xl px-4 py-3 max-w-xs;
+    @apply bg-secondary/10 border border-secondary/50 rounded-2xl px-4 py-3 max-w-2xl;
     box-shadow: 0 0 16px rgba(102, 204, 255, 0.15);
   }
 
