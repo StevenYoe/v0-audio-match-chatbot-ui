@@ -34,9 +34,9 @@ export default function Home() {
         <Header />
 
         {/* Full-screen chat layout */}
-        <div className="flex-1 overflow-hidden p-6">
+        <div className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-8 xl:px-12">
           <motion.div
-            className="h-full"
+            className="h-full max-w-7xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
